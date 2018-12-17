@@ -30,6 +30,7 @@
 
 **ESP 分组**：
 ![enter image description here](./Assets/esp.png)
+
 **字段含义**：
 - **安全参数索引**：与IP地址一同用来标识安全参数
 - **串行号**：单调递增的数值，用来防止重放攻击。
@@ -42,7 +43,7 @@
 
 ### 传输模式
 传输模式（`Transport Mode`）是`IPSec`的默认模式,又称端到端（`End-to-End`）模式，它适用于两台主机之间进行`IPSec`通信。
-传输模式下只对`IP`负载进行保护，可能是`TCP/UDP/ICMP`协议，也可能是`AH/ESP`协议。传输模式只为上层协议提供安全保护，在此种模式下，参与通信的双方主机都必须安装`IPSec`协议，而且它不能隐藏主机的IP地址。
+传输模式下只对`IP`负载进行保护，可能是`TCP/UDP/ICMP`协议，也可能是`AH/ESP`协议。传输模式只为上层协议提供安全保护，在此种模式下，参与通信的双方主机都必须安装`IPSec`协议，而且它不能隐藏主机的IP地址。   
 启用`IPSec`传输模式后，`IPSec`会在传输层包的前面增加`AH/ESP`头部或同时增加两种头部，构成一个`AH/ESP`数据包，然后添加`IP`头部组成`IP`包。在接收方，首先处理的是`IP`，然后再做`IPSec`处理，最后再将载荷数据交给上层协议。
 
 ### 传输模式下的 ESP 包
@@ -51,17 +52,17 @@
 
 **总流程图：**
 ![enter image description here](./Assets/process.png)
-红色区域：加密区
-黄色区域：验证区
-PS:原本是网上流传的一张图，但是有些错误，这里我做了两个改动：
-1.载荷数据改为 `TCP` 载荷数据。如果不写明 `TCP`，容易误解为 `IP` 的载荷数据，而`IP`的载荷数据是整个`TCP`报文。
-2. 验证区应该是 **ESP+密文**，而不是原图的`ESP+密文+ESP尾`。
-### 传输装拆包流程
+红色区域：加密区   
+黄色区域：验证区   
+PS:原本是网上流传的一张图，但是有些错误，这里我做了两个改动：   
+1. 载荷数据改为 `TCP` 载荷数据。如果不写明 `TCP`，容易误解为 `IP` 的载荷数据，而`IP`的载荷数据是整个`TCP`报文。  
+2. 验证区应该是 **ESP+密文**，而不是原图的`ESP+密文+ESP尾`。   
+### 传输装拆包流程 
 #### 装包过程
 1. 在原 IP 报文末尾添加尾部 `(ESP trailer)` 信息。尾部包含三部分：
-- 填充 `(padding)`: 所选算法可能是块加密，最后一块长度不够时需要进行填充
-- 填充长度 `(pad length)`:以字节为单位指示填充项长度  
-- `Next header`: 用来标明被加密的数据报⽂文的类型，例如 `6=TCP`。注意` ESP header` 中没有 `Next header`, 而是放在了 `Trailer` 中。
+	- 填充 `(padding)`: 所选算法可能是块加密，最后一块长度不够时需要进行填充
+	- 填充长度 `(pad length)`:以字节为单位指示填充项长度  
+	- `Next header`: 用来标明被加密的数据报⽂文的类型，例如 `6=TCP`。注意` ESP header` 中没有 `Next header`, 而是放在了 `Trailer` 中。
 2. 将原 `TCP` 报文和第 `1` 步得到的 `ESP trailer` 作为一个整体进行加密封装。具体的加密算法和密钥由 `SA` 给出。
 3. 为第 2 步得到的密文添加 `ESP` 头。`ESP`头由 `SPI (Security Parameter Index)` 和 `Seq#` 两部分组成，加密数据与 `ESP` 头合称为`“enchilada”`。
 4. 附加完整性度量结果（`ICV，Integrity check value`）。对第 2 步得到的`“enchilada”`做摘要，得到一个完整性度量值，并附在 `ESP` 报文的尾部。
@@ -72,8 +73,8 @@ PS:原本是网上流传的一张图，但是有些错误，这里我做了两�
 ##### 装包前后示意图
 
 ![enter image description here](./Assets/data2.png)
-可以明显看到结构上的变化：新增了ESP header,ESP Auth Data。其中 原本的TCP 报文和ESP trailer一起加密构成加密数据。
-IP 头的协议号也从6(TCP)变为 50(ESP)
+可以明显看到结构上的变化：新增了`ESP header`,`ESP Auth Data`。其中 原本的 `TCP` 报文和`ESP trailer`一起加密构成加密数据。  
+IP 头的协议号也从`6(TCP)`变为` 50(ESP)`
 ![enter image description here](./Assets/data3.png)
 
 ### 拆包过程
