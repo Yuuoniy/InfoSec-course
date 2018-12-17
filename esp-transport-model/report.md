@@ -50,7 +50,7 @@
 
 ![enter image description here](./Assets/header.png)
 
-**总流程图：**
+**总流程图：**   
 ![enter image description here](./Assets/process.png)
 红色区域：加密区   
 黄色区域：验证区   

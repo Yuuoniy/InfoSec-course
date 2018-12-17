@@ -228,10 +228,10 @@ void md5::display(){
 ```
 
 ## 编译运行结果
-输入较短的字符串：
+输入较短的字符串：   
 ![enter image description here](./Assets/res22.png)
 ![enter image description here](./Assets/res2.png)
-输出较长的字符串（大于 64)
+输出较长的字符串（大于 64)   
 ![enter image description here](./Assets/res11.png)
 ![enter image description here](./Assets/res1.png)
 

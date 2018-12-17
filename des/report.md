@@ -16,8 +16,8 @@ DES 原始明文消息按 **`PKCS#5 (RFC 8018)`** 规范进行字节填充。
 密钥结构：$K = k_1k_2 … k_64 , k_i \in{0, 1}, i = 1 .. 64.$
   除去 $k_8, k_16, …, k_64$ 共8位奇偶校验位，有效密钥为56位
 
-算法的总体结构如图所示：
-![enter image description here](./pics/des.png)
+算法的总体结构如图所示：  
+![enter image description here](./Assets/des.png)  
 密钥：$\{K_1, K_2, …, K_{16}\}$
 ### 加密过程
 1. **IP 置换**
@@ -179,9 +179,9 @@ P-置换表
 位置；否则循环左移两个位置。
 3. 对 `56`位的 $C_iD_i$ 实行 **PC-2 压缩置换**，得到48位的 $K_i$ 。i = i+1。
 4.  如果已经得到 $K_{16}$，密钥调度过程结束；否则转 2。
-**PC-2 压缩置换**：从56位的 $C_iD_i$ 中去掉第 $9, 18, 22, 25, 35, 38, 43,54$位，将剩下的48位按照 `PC-2` 置换表作置换，得到 $K_i$ 。
-子密钥生成流程图:
-![enter image description here](./pics/subkey.png)
+**PC-2 压缩置换**：从56位的 $C_iD_i$ 中去掉第 $9, 18, 22, 25, 35, 38, 43,54$位，将剩下的48位按照 `PC-2` 置换表作置换，得到 $K_i$ 。   
+子密钥生成流程图:     
+![enter image description here](./Assets/subkey.png) 
 ```py
 PC-1 置换表
 57 49 41 33 25 17 9
@@ -447,7 +447,7 @@ cout << endl;
 编译运行：`g++ des.cpp main.cpp -g -o des`
 可以看到，加密 `helloworld` 得到密文，因为有不可打印字符，所以显示有问题。拿该串密文进行解密，成功得到原始明文，运算结果正确。
 
-![enter image description here](./pics/des-res.png)
+![enter image description here](./Assets/des-res.png)
 
 ## 总结
 1. 学习 `DES` 的原理结构时，首先需要从全局把握主要的过程：`IP` 置换、`T` 迭代、`W` 置换、$IP^{-1}$置换。之后对每个步骤进行理解，尤其是 T 迭代部分的 F 轮函数，然后对于 F 轮函数中的 E盒，S盒，P盒进行学习理解。其中最主要的便是 S 盒。除此之外，还有一些细节方面的操作，比如数据填充，左移操作等。首先从全局出发，再对各个模块不断深入学习，有利于 `DES` 的学习掌握。
